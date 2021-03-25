@@ -5,6 +5,9 @@ This is a first person player controller I made for Unity in C#. It uses rigidbo
 *Features*
 
 - jumping
-- moving
+- walking
 - sprinting
 - crouching
+- no slipperly movement
+- slower movement while jumping for more realistic jumping
+
