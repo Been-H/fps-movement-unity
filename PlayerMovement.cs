@@ -117,14 +117,17 @@ public class PlayerMovement : MonoBehaviour
         transform.Rotate(transform.up * mouseX * mouseSens);
 
         cameraXrotation -= mouseY * mouseSens;
+        //change these two values for however much you want to clamp the looking up and down.
         cameraXrotation = Mathf.Clamp(cameraXrotation, -61f, 90f);
         cameraHolder.localRotation = Quaternion.Euler(cameraXrotation, 0f, 0f);
     
     }
 
     //ground check
+    //* make sure whatever you want to be the ground in your game matches the tag below called "Ground" or change it to whatever you want
     private void OnCollisionEnter(Collision other) {
         if (other.gameObject.tag == "Ground") {
+            currentSpeed = speed;
             isJumping = false;
             isGrounded = true;
         }
