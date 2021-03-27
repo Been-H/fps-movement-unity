@@ -12,13 +12,13 @@ public class PlayerMovement : MonoBehaviour
     public float jumpingSpeed = 3f;
     public float crouchingSpeed = 1f;
     public float jumpForce = 200f;
-    public float mouseSens = 15f; 
-    Vector3 playerScale = new Vector3(1, 1, 1);
+    public float mouseSens = 15f;
     Vector3 crouchScale = new Vector3(1, 0.5f, 1);
     public float extraGravity = 0.3f;
 
     private float currentSpeed;
     public float cameraXrotation = 0f;
+    Vector3 playerScale = new Vector3(1, 1, 1);
 
     //references
     private Rigidbody rb;
