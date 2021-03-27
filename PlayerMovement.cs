@@ -15,7 +15,8 @@ public class PlayerMovement : MonoBehaviour
     public float mouseSens = 15f;
     Vector3 crouchScale = new Vector3(1, 0.5f, 1);
     public float extraGravity = 0.3f;
-
+    
+    //don't change these unless you are seriously changing functionality
     private float currentSpeed;
     public float cameraXrotation = 0f;
     Vector3 playerScale = new Vector3(1, 1, 1);
