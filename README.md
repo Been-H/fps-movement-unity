@@ -10,5 +10,5 @@ This is a first person player controller I made for Unity in C#. It uses rigidbo
 - looking around and up and down with the mouse
 - crouching
 - no slipperly movement
-- slower movement while jumping for more realistic jumping
+- slower movement while jumping and extra gravity for more realistic jumping
 
