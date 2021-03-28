@@ -14,3 +14,11 @@ This is a first person player controller I made for Unity in C#. It uses rigidbo
 - no slipperly movement
 - slower movement while jumping and extra gravity for more realistic jumping
 
+*How to setup the character*
+
+1. Make a capsule with a Rigidbody
+2. create an empty game object and put it at eye level
+3. parent the main camera to it and put it at 0 0 0
+4. The parent object of the main camera is the "cameraHolder" in the script
+
+
