@@ -33,16 +33,14 @@ public class PlayerMovement : MonoBehaviour
 
 
     //getting some references, locking the mouse, and setting some defualt values
-    void Start()
-    {
+    void Start() {
         rb = GetComponent<Rigidbody>();
         currentSpeed = speed;
         cameraHolder.eulerAngles = new Vector3(0, 0, 0);
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void Update()
-    {
+    void Update() {
 
        //handle keyboard and mouse input
        HandleKeys(); 
