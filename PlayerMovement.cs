@@ -115,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
         transform.Rotate(transform.up * mouseX * mouseSens);
 
         cameraXrotation -= mouseY * mouseSens;
-        //change these two values for however much you want to clamp the looking up and down.
+        //change these two values for however much you want to clamp looking up and down.
         cameraXrotation = Mathf.Clamp(cameraXrotation, -61f, 90f);
         cameraHolder.localRotation = Quaternion.Euler(cameraXrotation, 0f, 0f);
     
