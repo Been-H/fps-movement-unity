@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
 
     //instance variables
     //tweak these for whatever feel you want
-    public float speed = 5f;
+    public float walkSpeed = 5f;
     public float sprintingSpeed = 10f;
     public float jumpingSpeed = 3f;
     public float crouchingSpeed = 1f;
@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
     //getting some references, locking the mouse, and setting some defualt values
     void Start() {
         rb = GetComponent<Rigidbody>();
-        currentSpeed = speed;
+        currentSpeed = walkingSpeed;
         cameraHolder.eulerAngles = new Vector3(0, 0, 0);
         Cursor.lockState = CursorLockMode.Locked;
     }
