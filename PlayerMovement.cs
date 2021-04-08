@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
        if (Input.GetKey(KeyCode.LeftShift) && !isJumping && !isCrouching) {
             currentSpeed = sprintingSpeed;
        } else if (!isCrouching && !isJumping) {
-            currentSpeed = speed;
+            currentSpeed = walkingSpeed;
        }
 
        //crouching (this is toggled)
@@ -101,7 +101,7 @@ public class PlayerMovement : MonoBehaviour
 
     //untoggle crouch
     void UnCrouch() {
-        currentSpeed = speed;
+        currentSpeed = walkingSpeed;
         isCrouching = false;
         transform.localScale = playerScale;
         transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
@@ -125,7 +125,7 @@ public class PlayerMovement : MonoBehaviour
     //* make sure whatever you want to be the ground in your game matches the tag below called "Ground" or change it to whatever you want
     private void OnCollisionEnter(Collision other) {
         if (other.gameObject.tag == "Ground") {
-            currentSpeed = speed;
+            currentSpeed = walkingSpeed;
             isJumping = false;
             isGrounded = true;
         }
