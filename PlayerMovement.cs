@@ -5,15 +5,14 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
 
-    //instance variables
-    //tweak these for whatever feel you want
+    //instance variables (tweak these to change the feel of the player controller)
     public float walkSpeed = 5f;
-    public float sprintingSpeed = 10f;
+    public float sprintingSpeed = 10f; 
     public float jumpingSpeed = 3f;
     public float crouchingSpeed = 1f;
     public float jumpForce = 200f;
-    public float mouseSens = 15f;
-    Vector3 crouchScale = new Vector3(1, 0.5f, 1);
+    public float mouseSens = 15f; //can change to be X and Y sens if wanted
+    Vector3 crouchScale = new Vector3(1, 0.5f, 1); //change for how large you want when crouching
     public float extraGravity = 0.3f;
     
     //don't change these unless you are seriously changing functionality
