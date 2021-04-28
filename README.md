@@ -17,8 +17,7 @@ This is a first person player controller I made for Unity in C#. It uses rigidbo
 *How to setup the character*
 
 1. Make a capsule with a Rigidbody
-2. create an empty game object and put it at eye level
-3. parent the main camera to it and put it at 0 0 0
-4. The parent object of the main camera is the "cameraHolder" in the script
+2. create an empty game object and put it at eye level (this object is the "cameraHolder" object in the script
+3. parent the main camera to this object and put the camera at 0 0 0 in it
 
 
