@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
 
     //instance variables (tweak these to change the feel of the player controller)
-    public float walkSpeed = 5f;
+    public float walkingSpeed = 5f;
     public float sprintingSpeed = 10f; 
     public float jumpingSpeed = 3f;
     public float crouchingSpeed = 1f;
