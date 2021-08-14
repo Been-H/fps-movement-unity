@@ -4,20 +4,21 @@ This is a first person player controller I made for Unity in C#. It uses rigidbo
 
 *Features*
 
-- walking
-- sprinting
-- crouching (toggled)
-- jumping
-- different speeds for crouching, walking, sprinting etc.
-- looking around and up and down with the mouse
-- looking up and down is clamped
-- no slipperly movement
-- slower movement while jumping and extra gravity for more realistic jumping
+- Walking
+- Sprinting
+- Crouching (toggle or hold) (midair or on ground)
+- Jumping
+- Configurable speeds for crouching, walking, sprinting etc.
+- Smoothing of the camera, controlled by the mouse
+- Clamped look directions
+- No slipperly movement
+- Slower movement while jumping and extra gravity
 
 *How to setup the character*
 
-1. Make a capsule with a Rigidbody
-2. create an empty game object and put it at eye level (this object is the "cameraHolder" object in the script
-3. parent the main camera to this object and put the camera at 0 0 0 in it
+1. Make a capsule with a Rigidbody (set its weight to 10 *OPTIONAL*)
+2. Drag this script onto the capsule
+3. Create a camera (child of the capsule) and put it at eye level
+4. Done
 
 
