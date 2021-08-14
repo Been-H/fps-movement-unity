@@ -17,12 +17,29 @@ This is a first person player controller I made for Unity in C#. It uses rigidbo
 
 *How to setup the character*
 
-1. Make a capsule with a Rigidbody (set its weight to 10 *OPTIONAL*)
-2. Drag this script onto the capsule
-3. Create a camera (child of the capsule) and put it at eye level
-4. Done
+Create a capsule 
 
-*Changes in fork*
+![alt text](https://raw.githubusercontent.com/B0N3head/fps-movement-unity/main/assets/1.PNG)
+
+Add a rigidbody to the capsule (set its weight to 10 *OPTIONAL*)
+
+![alt text](https://raw.githubusercontent.com/B0N3head/fps-movement-unity/main/assets/5.png)
+
+Drag the script onto the capsule (download it first)
+
+![alt text](https://raw.githubusercontent.com/B0N3head/fps-movement-unity/main/assets/2.PNG)
+
+Create a camera (child of the capsule)
+
+![alt text](https://raw.githubusercontent.com/B0N3head/fps-movement-unity/main/assets/3.PNG)
+
+Move the camera to eye level
+
+![alt text](https://raw.githubusercontent.com/B0N3head/fps-movement-unity/main/assets/4.PNG)
+
+Done
+
+*Changes made in this fork*
 
 1. Fixed jump resting move speed when crouching
 2. Added mouse smoothing for camera movement
@@ -37,5 +54,5 @@ This is a first person player controller I made for Unity in C#. It uses rigidbo
 11. Moved movement code to fixedUpdate
 12. Renamed/moved/removed some functions
 12. Renamed/moved/removed some variables
-13. Added ComponentMenu header for inspector
 14. Combined crouch and uncrouch together into one function
+15. Added pictures for setup
