@@ -1,130 +1,185 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[AddComponentMenu("Easy Player Movement/Camera Controller")]
 public class PlayerMovement : MonoBehaviour
 {
+    Vector2 _mouseAbsolute;
+    Vector2 _smoothMouse;
+    Vector2 targetDirection;
+    Vector2 targetCharacterDirection;
 
+    [Header("Camera Settings")]
+    public bool lockCursor;
+    public Vector2 clampInDegrees = new Vector2(360, 180);
+    public Vector2 sensitivity = new Vector2(2, 2);
+    public Vector2 smoothing = new Vector2(1.5f, 1.5f);
+
+    [Space]
+    [Header("Movement Settings")]
     //instance variables (tweak these to change the feel of the player controller)
     public float walkingSpeed = 5f;
-    public float sprintingSpeed = 10f; 
+    public float sprintingSpeed = 10f;
     public float jumpingSpeed = 3f;
     public float crouchingSpeed = 1f;
-    public float jumpForce = 200f;
-    public float mouseSens = 15f; //can change to be X and Y sens if wanted
+    public float jumpForce = 10f;
+    public bool holdToCrouch = true;
+    public bool jumpCrouching = true;
     Vector3 crouchScale = new Vector3(1, 0.5f, 1); //change for how large you want when crouching
+    Vector3 standScale = new Vector3(1, 1, 1);
     public float extraGravity = 0.3f;
-    
-    //don't change these unless you are seriously changing functionality
-    private float currentSpeed;
-    public float cameraXrotation = 0f;
-    Vector3 playerScale = new Vector3(1, 1, 1);
+
+    [Space]
+    [Header("Keyboard Settings")]
+    public KeyCode jump = KeyCode.Space;
+    public KeyCode sprint = KeyCode.LeftShift;
+    public KeyCode crouch = KeyCode.Z;
+    public KeyCode lockToggle = KeyCode.Q;
 
     //references
     private Rigidbody rb;
-    public Camera camera;
-    public Transform cameraHolder;
+    public GameObject cam;
 
+    [Space]
+    [Header("Debug Info")]
     //states
-    bool isJumping = false;
-    bool isGrounded = true;
-    bool isCrouching = false;
-
+    public bool isJumping = false;
+    public bool isGrounded = true;
+    public bool isCrouching = false;
+    public float currentSpeed;
 
     //getting some references, locking the mouse, and setting some defualt values
-    void Start() {
+    void Start()
+    {
         rb = GetComponent<Rigidbody>();
         currentSpeed = walkingSpeed;
-        cameraHolder.eulerAngles = new Vector3(0, 0, 0);
-        Cursor.lockState = CursorLockMode.Locked;
+
+        // Set target direction to the camera's initial orientation.
+        targetDirection = transform.localRotation.eulerAngles;
+
+        // Set target direction for the character body to its inital state.
+        targetCharacterDirection = transform.localRotation.eulerAngles;
     }
 
-    void Update() {
+    private void Update()
+    {
+        // Allow the script to clamp based on a desired target value.
+        var targetOrientation = Quaternion.Euler(targetDirection);
+        var targetCharacterOrientation = Quaternion.Euler(targetCharacterDirection);
 
-       //handle keyboard and mouse input
-       HandleKeys(); 
-       LookAtMouse();
-       
-       //jumping
-       if (Input.GetButtonDown("Jump") && isGrounded) {
-           Jump();
-       }
+        // Get raw mouse input for a cleaner reading on more sensitive mice.
+        var mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
-       //sprinting
-       if (Input.GetKey(KeyCode.LeftShift) && !isJumping && !isCrouching) {
-            currentSpeed = sprintingSpeed;
-       } else if (!isCrouching && !isJumping) {
-            currentSpeed = walkingSpeed;
-       }
+        // Scale input against the sensitivity setting and multiply that against the smoothing value.
+        mouseDelta = Vector2.Scale(mouseDelta, new Vector2(sensitivity.x * smoothing.x, sensitivity.y * smoothing.y));
 
-       //crouching (this is toggled)
-       if (Input.GetKeyDown(KeyCode.LeftCommand)) {
-            if (isCrouching) {
-                UnCrouch();   
-            } else if(!isCrouching && !isJumping) {
-                Crouch();   
-            }
-       }
+        // Interpolate mouse movement over time to apply smoothing delta.
+        _smoothMouse.x = Mathf.Lerp(_smoothMouse.x, mouseDelta.x, 1f / smoothing.x);
+        _smoothMouse.y = Mathf.Lerp(_smoothMouse.y, mouseDelta.y, 1f / smoothing.y);
 
-       //extra gravity for more realistic jumping
-       rb.AddForce(new Vector3(0, -extraGravity, 0), ForceMode.Impulse);       
+        // Find the absolute mouse movement value from point zero.
+        _mouseAbsolute += _smoothMouse;
+
+        // Clamp and apply the local x value first, so as not to be affected by world transforms.
+        if (clampInDegrees.x < 360)
+            _mouseAbsolute.x = Mathf.Clamp(_mouseAbsolute.x, -clampInDegrees.x * 0.5f, clampInDegrees.x * 0.5f);
+
+        // Then clamp and apply the global y value.
+        if (clampInDegrees.y < 360)
+            _mouseAbsolute.y = Mathf.Clamp(_mouseAbsolute.y, -clampInDegrees.y * 0.5f, clampInDegrees.y * 0.5f);
+
+        cam.transform.localRotation = Quaternion.AngleAxis(-_mouseAbsolute.y, targetOrientation * Vector3.right) * targetOrientation;
+
+        var yRotation = Quaternion.AngleAxis(_mouseAbsolute.x, Vector3.up);
+        transform.localRotation = yRotation * targetCharacterOrientation;
     }
 
-    //handling user input (wasd) for moving
-    void HandleKeys() {
+    void FixedUpdate()
+    {
+        //Mouse lock toggle
+        if (Input.GetKeyDown(lockToggle))
+            lockCursor = !lockCursor;
+
+        if (lockCursor)
+            Cursor.lockState = CursorLockMode.Locked;
+        else
+            Cursor.lockState = CursorLockMode.None;
+
+        //WSAD movement
         Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         input = input.normalized;
         Vector3 forwardVel = transform.forward * currentSpeed * input.z;
         Vector3 horizontalVel = transform.right * currentSpeed * input.x;
         rb.velocity = horizontalVel + forwardVel + new Vector3(0, rb.velocity.y, 0);
+
+        //Jumping
+        if (Input.GetKey(jump) && isGrounded)
+            Jump();
+
+        //Sprinting
+        if (Input.GetKey(sprint) && !isJumping && !isCrouching)
+            currentSpeed = sprintingSpeed;
+        else if (!isCrouching && !isJumping)
+            currentSpeed = walkingSpeed;
+
+        //Crouching
+        if (Input.GetKey(crouch))
+        {
+            if (isCrouching && !holdToCrouch)
+                Crouch(false);
+            else if (!isCrouching && jumpCrouching)
+                Crouch(true);
+            else if (!isCrouching && !isJumping && !jumpCrouching)
+                Crouch(true);
+
+        }
+        else if (holdToCrouch && isCrouching)
+        {
+            Crouch(false);
+        }
+
+        //Extra gravity for more realistic jumping
+        rb.AddForce(new Vector3(0, -extraGravity, 0), ForceMode.Impulse);
     }
 
     //handling jumping
-    void Jump() {
+    void Jump()
+    {
         currentSpeed = jumpingSpeed;
         isGrounded = false;
         isJumping = true;
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-        if (isCrouching) {
+        if (isCrouching)
             currentSpeed = crouchingSpeed;
-        }
     }
 
     //toggle crouch
-    void Crouch() {
-        currentSpeed = crouchingSpeed;
-        isCrouching = true;
-        transform.localScale = crouchScale;
-        transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
-    }
-
-    //untoggle crouch
-    void UnCrouch() {
-        currentSpeed = walkingSpeed;
-        isCrouching = false;
-        transform.localScale = playerScale;
-        transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
-    }
-
-    //look at mouse
-    void LookAtMouse() {
-        float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * Mathf.Rad2Deg;
-        float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * Mathf.Rad2Deg;
-        
-        transform.Rotate(transform.up * mouseX * mouseSens);
-
-        cameraXrotation -= mouseY * mouseSens;
-        //change these two values for however much you want to clamp looking up and down.
-        cameraXrotation = Mathf.Clamp(cameraXrotation, -61f, 90f);
-        cameraHolder.localRotation = Quaternion.Euler(cameraXrotation, 0f, 0f);
-    
+    void Crouch(bool crouch)
+    {
+        isCrouching = crouch;
+        if (crouch)
+        {
+            currentSpeed = crouchingSpeed;
+            transform.localScale = crouchScale;
+            transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
+        }
+        else
+        {
+            currentSpeed = walkingSpeed;
+            transform.localScale = standScale;
+            transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+        }
     }
 
     //ground check
     //* make sure whatever you want to be the ground in your game matches the tag below called "Ground" or change it to whatever you want
-    private void OnCollisionEnter(Collision other) {
-        if (other.gameObject.tag == "Ground") {
-            currentSpeed = walkingSpeed;
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Ground")
+        {
+            if (isCrouching)
+                currentSpeed = crouchingSpeed;
+            else
+                currentSpeed = walkingSpeed;
             isJumping = false;
             isGrounded = true;
         }
