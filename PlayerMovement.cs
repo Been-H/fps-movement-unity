@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 clampInDegrees = new Vector2(360, 180);
     public Vector2 sensitivity = new Vector2(2, 2);
     public Vector2 smoothing = new Vector2(1.5f, 1.5f);
+    public string cameraName = "Camera";
 
     [Space]
     [Header("Movement Settings")]
@@ -37,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
 
     //references
     private Rigidbody rb;
-    public GameObject cam;
+    private GameObject cam;
 
     [Space]
     [Header("Debug Info")]
@@ -51,11 +52,11 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        cam = gameObject.transform.Find(cameraName).gameObject;
         currentSpeed = walkingSpeed;
 
         // Set target direction to the camera's initial orientation.
         targetDirection = transform.localRotation.eulerAngles;
-
         // Set target direction for the character body to its inital state.
         targetCharacterDirection = transform.localRotation.eulerAngles;
     }
@@ -121,7 +122,7 @@ public class PlayerMovement : MonoBehaviour
         else if (!isCrouching && !isJumping)
             currentSpeed = walkingSpeed;
 
-        //Crouching
+        //Crouching (alot of if)
         if (Input.GetKey(crouch))
         {
             if (isCrouching && !holdToCrouch)
@@ -130,7 +131,6 @@ public class PlayerMovement : MonoBehaviour
                 Crouch(true);
             else if (!isCrouching && !isJumping && !jumpCrouching)
                 Crouch(true);
-
         }
         else if (holdToCrouch && isCrouching)
         {
