@@ -18,22 +18,22 @@ public class PlayerMovement : MonoBehaviour
     [Space]
     [Header("Movement Settings")]
     //instance variables (tweak these to change the feel of the player controller)
-    public float walkingSpeed = 5f;
-    public float sprintingSpeed = 10f;
-    public float jumpingSpeed = 3f;
-    public float crouchingSpeed = 1f;
-    public float jumpForce = 10f;
+    public float walkingSpeed = 7.5f;
+    public float sprintingSpeed = 11f;
+    public float jumpingSpeed = 6f;
+    public float crouchingSpeed = 3f;
+    public float jumpForce = 100f;
     public bool holdToCrouch = true;
     public bool jumpCrouching = true;
     Vector3 crouchScale = new Vector3(1, 0.5f, 1); //change for how large you want when crouching
     Vector3 standScale = new Vector3(1, 1, 1);
-    public float extraGravity = 0.3f;
+    public float extraGravity = 0.1f;
 
     [Space]
     [Header("Keyboard Settings")]
     public KeyCode jump = KeyCode.Space;
     public KeyCode sprint = KeyCode.LeftShift;
-    public KeyCode crouch = KeyCode.Z;
+    public KeyCode crouch = KeyCode.LeftAlt;
     public KeyCode lockToggle = KeyCode.Q;
 
     //references
