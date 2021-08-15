@@ -37,7 +37,7 @@ Download and add the files to your assets
 
 Add a capsule to your scene
 
-![alt text](https://raw.githubusercontent.com/B0N3head/fps-movement-unity/main/assets/2.png)
+![alt text](https://raw.githubusercontent.com/B0N3head/fps-movement-unity/main/assets/2.PNG)
 
 Add the Player Movement script through Component -> Player Movement and Camera Controller
 
