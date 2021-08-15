@@ -36,15 +36,19 @@ Download and add the files to your assets
 ![alt text](https://raw.githubusercontent.com/B0N3head/fps-movement-unity/main/assets/1.PNG)
 
 Add a capsule to your scene
+
 ![alt text](https://raw.githubusercontent.com/B0N3head/fps-movement-unity/main/assets/2.png)
 
 Add the Player Movement script through Component -> Player Movement and Camera Controller
+
 ![alt text](https://raw.githubusercontent.com/B0N3head/fps-movement-unity/main/assets/3.PNG)
 
 Click the "Setup Player" button
+
 ![alt text](https://raw.githubusercontent.com/B0N3head/fps-movement-unity/main/assets/4.PNG)
 
 Done, this is what you should be left with
+
 ![alt text](https://raw.githubusercontent.com/B0N3head/fps-movement-unity/main/assets/5.PNG)
 
 ### Changes made in this fork
