@@ -1,6 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-[AddComponentMenu("Easy Player Movement/Camera Controller")]
+[AddComponentMenu("Player Movement and Camera Controller")]
 public class PlayerMovement : MonoBehaviour
 {
     Vector2 _mouseAbsolute;
@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     Vector2 targetCharacterDirection;
 
     [Header("Camera Settings")]
-    public bool lockCursor;
+    public bool lockCursor = true;
     public Vector2 clampInDegrees = new Vector2(360, 180);
     public Vector2 sensitivity = new Vector2(2, 2);
     public Vector2 smoothing = new Vector2(1.5f, 1.5f);
@@ -29,16 +29,17 @@ public class PlayerMovement : MonoBehaviour
     Vector3 standScale = new Vector3(1, 1, 1);
     public float extraGravity = 0.1f;
 
+    //references
+    private Rigidbody rb;
+    private GameObject cam;
+
     [Space]
     [Header("Keyboard Settings")]
     public KeyCode jump = KeyCode.Space;
     public KeyCode sprint = KeyCode.LeftShift;
-    public KeyCode crouch = KeyCode.LeftAlt;
+    public KeyCode crouch = KeyCode.Z;
     public KeyCode lockToggle = KeyCode.Q;
 
-    //references
-    private Rigidbody rb;
-    private GameObject cam;
 
     [Space]
     [Header("Debug Info")]
@@ -48,10 +49,9 @@ public class PlayerMovement : MonoBehaviour
     public bool isCrouching = false;
     public float currentSpeed;
 
-    //getting some references, locking the mouse, and setting some defualt values
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        rb = gameObject.GetComponent<Rigidbody>();
         cam = gameObject.transform.Find(cameraName).gameObject;
         currentSpeed = walkingSpeed;
 
@@ -182,6 +182,40 @@ public class PlayerMovement : MonoBehaviour
                 currentSpeed = walkingSpeed;
             isJumping = false;
             isGrounded = true;
+        }
+    }
+
+    public void setupCharacter()
+    {
+        if (!gameObject.GetComponent<Rigidbody>())
+        {
+            Rigidbody rb = gameObject.AddComponent(typeof(Rigidbody)) as Rigidbody;
+            rb.mass = 10;
+            Debug.Log("Added Rigidbody");
+        }
+        else
+        {
+            Debug.Log("Rigidbody already found");
+        }
+
+        Physics.gravity = new Vector3(0, -19F, 0);
+        Debug.Log("Physics set");
+        if (!gameObject.transform.Find("Camera"))
+        {
+            Vector3 old = transform.position;
+            gameObject.transform.position = new Vector3(0, -0.8f, 0); // Hmmm
+            GameObject go = new GameObject("Camera");
+            go.AddComponent<Camera>();
+            go.AddComponent<AudioListener>();
+            go.transform.rotation = new Quaternion(0, 0, 0, 0);
+            go.transform.localScale = new Vector3(1, 1, 1);
+            go.transform.parent = transform; // Hacky way to do it
+            gameObject.transform.position = old; // But it works
+            Debug.Log("Camera created");
+        }
+        else
+        {
+            Debug.Log("Camera already created");
         }
     }
 }
